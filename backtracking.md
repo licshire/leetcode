@@ -52,3 +52,69 @@ class Solution {
     }
 }
 ```
+---
+
+#### 131. Palindrome Partitioning
+###### 题目描述：
+
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+For example, given s = "aab",
+Return
+```
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+```
+
+###### 思路：
+回溯方法，遍历所有可能，当前子串不为回文时跳过递归。
+###### 代码：
+```
+class Solution {
+    public List<List<String>> partition(String s) {
+        
+        List<List<String>> res = new ArrayList<>();
+        List<String> tmp = new ArrayList<>();
+        solve(0, s, tmp, res);
+        
+        return res;
+    }
+    
+    public void solve(int start, String s, List<String> tmp, List<List<String>> res){
+        int len = s.length();
+        
+        if (start >= len){
+            res.add(new ArrayList(tmp));
+            return;
+        }
+        
+        for (int i = start+1; i <= len; i++){ // i 为子字符串end位置。
+            String sub = s.substring(start, i);
+            if (!checkPalindrome(sub)){
+                continue;
+            }
+            tmp.add(sub);
+            solve(i, s, tmp, res);
+            tmp.remove(tmp.size()-1);
+        }
+    }
+    
+    public boolean checkPalindrome(String sub){
+        
+        int end = sub.length()-1;
+        int start = 0;
+        while(start <= end){
+            if (sub.charAt(start) != sub.charAt(end)){
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+}
+```
