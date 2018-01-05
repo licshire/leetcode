@@ -26,6 +26,7 @@ Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 
 - function: f[i] = MIN{f[j]+1}, j < i && j+1 ~ i这一段是一个回文串
 - initialize: f[i] = i (f[0] = 0)
 - answer: f[n] – 1
+
 动态规划2：
 - state: flag[j][i]表示第j 个字符到第i个字符是不是回文
 - function: flag[j][i] = true, s[j] == s[i] && flag[j+1][i-1] == true
