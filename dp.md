@@ -12,6 +12,55 @@
 
 ### 单序列
 
+#### 139. Word Break
+###### 题目描述：
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words. You may assume the dictionary does not contain duplicate words.
+
+For example, given
+```
+s = "leetcode",
+dict = ["leet", "code"].
+```
+Return true because "leetcode" can be segmented as "leet code".
+
+###### 思路：
+词典转换成map, 用来判断子串是否在词典中；
+动态规划：
+- status: dp[i] 到第i的字符子串是否可分
+- function: dp[i] = true if exsit j, dp[j] = true && s[j][i] in dict; j <= i;
+- init: dp[i] = true
+- ans: dp[len]
+
+###### 代码：
+```
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        
+        int len = s.length();
+        
+        boolean[] dp = new boolean[len+1];
+        Map<String, Boolean> dict = new HashMap<>();
+        
+        for (String str: wordDict){
+            dict.put(str, true);
+        }
+        
+        dp[0] = true;
+         //j 从后向前和从前向后，速度不一样
+        for(int i=1; i <= s.length(); i++){
+            for(int j= i-1; j >= 0; j--){
+                if(dp[j] && dict.containsKey(s.substring(j, i))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        
+        return dp[s.length()];
+    }
+}
+```
+
 ####  132. Palindrome Partitioning II
 ###### 题目描述：
 Given a string s, partition s such that every substring of the partition is a palindrome.
