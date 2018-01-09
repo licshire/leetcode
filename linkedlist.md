@@ -106,3 +106,49 @@ class Solution {
     }
 }
 ```
+---
+### 138. Copy List with Random Pointer
+###### 描述
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+###### 思路
+第一次遍历，生成next链接， 并记录每个原链表节点和新链表节点的map, 第二次遍历，生成random链接。
+###### 代码
+```
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        
+        RandomListNode tmp = head;
+        
+        Map<RandomListNode, RandomListNode> map = new HashMap<>();
+        RandomListNode root = new RandomListNode(-1);
+        RandomListNode pre = root;
+        while (tmp != null){
+            pre.next = new RandomListNode(tmp.label);
+            pre = pre.next;
+            map.put(tmp, pre);
+            tmp = tmp.next;
+        }
+        pre = root.next;
+        while (head != null){
+            
+            if (head.random != null){
+                pre.random = map.get(head.random);
+            }
+            head = head.next;
+            pre = pre.next;
+            
+        }
+        return root.next;
+    }
+}
+```
