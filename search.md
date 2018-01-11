@@ -228,3 +228,76 @@ class Solution {
 }
 ```
 
+---
+## 215. Kth Largest Element in an Array
+
+###### 题目描述：
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+For example,
+Given [3,2,1,5,6,4] and k = 2, return 5.
+
+Note: 
+You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+###### 思路
+1、参考快速排，进行快速搜索，平均复杂度O（n）,最差O（N×N）
+2、堆，保持k个元素的大根堆
+###### 代码
+S1：
+```
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+            
+        int n = nums.length;
+        int loc = quickSearch(0, nums.length-1,  n-k+1, nums);
+        return nums[loc];
+    }
+    
+    public int quickSearch(int start, int end, int k, int[] nums){
+        
+        
+        int i = start, j = end, pov = nums[end];
+
+        while (i < j){
+            if (nums[i++] > pov)
+                swap(nums, --i, --j);
+        }
+        swap(nums, i, end);
+        
+        int loc = i - start + 1;
+        
+        if (loc == k)
+            return i;
+        if (loc > k)// res in left
+            return quickSearch(start, i-1, k, nums);
+        else // res in right
+            return quickSearch(i+1, end, k-loc, nums);
+            
+    }
+    
+    public void swap(int[] nums, int i, int j){
+        
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+}
+```
+S2：
+```
+//         PriorityQueue<Integer> q = new PriorityQueue(new Comparator<Integer>() {
+//                     public int compare(Integer i1, Integer i2) {
+//                         return i2 - i1;
+//                     }
+//                 });
+//         for (int i = 0; i < nums.length; i++){
+//             q.add(nums[i]);
+//         }
+//         int res = 0;
+//         while (k != 0){
+//             res = q.poll();
+//             k--;
+//         }
+        
+//         return res;        
+```
