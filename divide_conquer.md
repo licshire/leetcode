@@ -81,3 +81,79 @@ class Solution {
 }
 
 ```
+
+---
+#### 95. Unique Binary Search Trees II
+
+###### 题目描述
+Given an integer n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+
+For example,
+Given n = 3, your program should return all 5 unique BST's shown below.
+```
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+```
+###### 解析
+分治和dp思想，依次选择1-n做根节点，两边分别再求所有可能情况， 最后依次做为根节点的左右子树。
+###### 代码
+```
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<TreeNode> generateTrees(int n) {
+        
+        if (n == 0)
+            return new ArrayList<>();
+        List<TreeNode>[][] dp = new List[n+2][n+2];
+        return generateTrees(1, n, dp);
+    }
+    
+    public List<TreeNode> generateTrees(int start, int end,List<TreeNode>[][] dp) {
+        
+        if (dp[start][end] != null)
+            return dp[start][end];
+        List<TreeNode> res = new ArrayList<>();
+            
+        if (start > end){
+            res.add(null);
+            return res;
+        }
+        if (end == start){
+            res.add(new TreeNode(end));
+            return res;
+        }
+        
+        for (int i = start; i <= end; i++){
+           
+            List<TreeNode> lefts = generateTrees(start, i-1, dp);
+            List<TreeNode> rights = generateTrees(i+1, end, dp);
+            
+            for (TreeNode l : lefts){
+                for (TreeNode r: rights){
+                    TreeNode root = new TreeNode(i);
+                    root.left = l;
+                    root.right = r;
+                    res.add(root);
+                }
+            }
+        } 
+        dp[start][end] = res;
+        
+        return res;
+    }
+    
+
+}
+```
+
